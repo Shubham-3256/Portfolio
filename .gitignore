@@ -1,2 +1,3 @@
-contact-backend/.env
-contact-backend/.env
+# .gitignore
+node_modules/
+.env

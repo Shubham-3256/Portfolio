@@ -13,47 +13,49 @@ import {
   FaLinkedin,
   FaInstagram,
 } from "react-icons/fa";
-const handleSubmit = async (e) => {
-  e.preventDefault();
-
-  const formData = {
-    name: e.target.name.value,
-    email: e.target.email.value,
-    message: e.target.message.value,
-  };
-
-  try {
-    const res = await fetch(
-      "https://shubham-contact-api.onrender.com/contact",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      }
-    );
-
-    if (res.ok) {
-      alert("Message sent successfully!");
-      e.target.reset(); // clear the form
-    } else {
-      alert("Failed to send message. Please try again.");
-    }
-  } catch (err) {
-    console.error(err);
-    alert("An error occurred. Please try later.");
-  }
-};
 
 function App() {
   const [loading, setLoading] = useState(true);
+  const [formStatus, setFormStatus] = useState("");
 
   useEffect(() => {
     AOS.init({ duration: 1000, once: true });
     const timeout = setTimeout(() => setLoading(false), 1200);
     return () => clearTimeout(timeout);
   }, []);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const formData = {
+      name: e.target.name.value,
+      email: e.target.email.value,
+      message: e.target.message.value,
+    };
+
+    try {
+      const res = await fetch(
+        "https://shubham-contact-api.onrender.com/contact",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
+
+      if (res.ok) {
+        setFormStatus("Message sent successfully!");
+        e.target.reset();
+      } else {
+        setFormStatus("Failed to send message. Please try again.");
+      }
+    } catch (err) {
+      console.error(err);
+      setFormStatus("An error occurred. Please try later.");
+    }
+  };
 
   const projects = [
     {
@@ -104,16 +106,13 @@ function App() {
       <section id="about" data-aos="fade-up" aria-labelledby="about-heading">
         <div className="section-content">
           <h2 id="about-heading">About Me</h2>
-          <p>
-            <center>
-              {" "}
-              I am a passionate Computer Science Engineering student
-              specializing in full-stack web development and AI/ML. With
-              hands-on experience in the MERN stack, Python, and cloud-based
-              applications, I am eager to build innovative solutions that solve
-              real-world problems. My goal is to contribute to the field of AI
-              while continuously learning and evolving as a developer.
-            </center>
+          <p style={{ textAlign: "center" }}>
+            I am a passionate Computer Science Engineering student specializing
+            in full-stack web development and AI/ML. With hands-on experience in
+            the MERN stack, Python, and cloud-based applications, I am eager to
+            build innovative solutions that solve real-world problems. My goal
+            is to contribute to the field of AI while continuously learning and
+            evolving as a developer.
           </p>
         </div>
       </section>
@@ -194,6 +193,7 @@ function App() {
             </label>
             <input
               id="name"
+              name="name"
               type="text"
               placeholder="Your Name"
               required
@@ -205,6 +205,7 @@ function App() {
             </label>
             <input
               id="email"
+              name="email"
               type="email"
               placeholder="Your Email"
               required
@@ -216,12 +217,14 @@ function App() {
             </label>
             <textarea
               id="message"
+              name="message"
               placeholder="Your Message"
               rows="5"
               required
             ></textarea>
 
             <button type="submit">Send Message</button>
+            {formStatus && <p className="form-status">{formStatus}</p>}
           </form>
         </div>
       </section>
@@ -241,7 +244,7 @@ function App() {
             <FaGithub />
           </a>
           <a
-            href="https://www.linkedin.com/in/shubham325698?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base_contact_details%3B1UejKY1WQBWy%2FE%2FCoAKrzA%3D%3D"
+            href="https://www.linkedin.com/in/shubham325698"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="LinkedIn"
@@ -249,7 +252,7 @@ function App() {
             <FaLinkedin />
           </a>
           <a
-            href="https://www.instagram.com/__shubham__00_/?next=%2F"
+            href="https://www.instagram.com/__shubham__00_/"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Instagram"
